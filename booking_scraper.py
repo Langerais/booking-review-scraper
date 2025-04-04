@@ -114,6 +114,7 @@ def scrape_booking_reviews(url, max_reviews, output_file, debug=False):
     try:
         driver.get(url)
         time.sleep(3)
+        dismiss_cookie_popup(driver)
         click_see_all_reviews(driver)
         reviews = scroll_and_load_reviews(driver, max_reviews)
 
@@ -124,6 +125,36 @@ def scrape_booking_reviews(url, max_reviews, output_file, debug=False):
 
     finally:
         driver.quit()
+
+
+
+def dismiss_cookie_popup(driver):
+    try:
+        # Try the "Reject all" aria-label first
+        reject_btn = WebDriverWait(driver, 5).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "button[aria-label='Reject all']"))
+        )
+        reject_btn.click()
+        print("[*] Rejected cookies via aria-label.")
+        time.sleep(1)
+        return
+    except:
+        pass
+
+    try:
+        # Try buttons with visible text
+        buttons = driver.find_elements(By.TAG_NAME, "button")
+        for btn in buttons:
+            text = btn.text.strip().lower()
+            if text in ["reject all", "decline", "don't accept", "reject"]:
+                btn.click()
+                print(f"[*] Rejected cookies via text: {text}")
+                time.sleep(1)
+                return
+    except:
+        pass
+
+    print("[*] No cookie popup dismissed.")
 
 
 if __name__ == "__main__":
