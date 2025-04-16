@@ -2,14 +2,16 @@
 
 import argparse
 import json
-import os
-import openai
 
 from openai import OpenAI
 import os
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+# Optional override from settings if present
+if not client.api_key:
+    with open("settings.json", "r") as f:
+        client.api_key = json.load(f).get("openai_key")
 
 
 def load_reviews(json_file, limit=50):
@@ -41,6 +43,10 @@ def prepare_prompt(reviews):
 
 
 def analyze_reviews(reviews):
+    if not reviews:
+        print("[!] No reviews to analyze. Skipping OpenAI request.")
+        return "No reviews available for analysis."
+
     prompt = prepare_prompt(reviews)
 
     response = client.chat.completions.create(
@@ -54,6 +60,7 @@ def analyze_reviews(reviews):
     )
 
     return response.choices[0].message.content
+
 
 
 if __name__ == "__main__":

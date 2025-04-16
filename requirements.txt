@@ -1,4 +1,4 @@
-beautifulsoup4
-selenium
+beautifulsoup4~=4.13.3
+selenium~=4.30.0
 webdriver-manager
-openai
+openai~=1.70.0

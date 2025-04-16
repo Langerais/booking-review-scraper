@@ -19,10 +19,18 @@ def init_driver(debug=False):
     options = Options()
     if not debug:
         options.add_argument("--headless=new")
+        options.add_argument("--disable-gpu")
+        options.add_argument("--window-size=1920,1080")  # Set full viewport size
+
     options.add_argument("--disable-notifications")
     options.add_argument("--start-maximized")
+    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                         "AppleWebKit/537.36 (KHTML, like Gecko) "
+                         "Chrome/122.0.0.0 Safari/537.36")
+
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     return driver
+
 
 
 def click_see_all_reviews(driver):
@@ -125,7 +133,6 @@ def scrape_booking_reviews(url, max_reviews, output_file, debug=False):
 
     finally:
         driver.quit()
-
 
 
 def dismiss_cookie_popup(driver):
