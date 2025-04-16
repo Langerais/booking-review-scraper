@@ -2,16 +2,17 @@
 
 import argparse
 import json
-
-from openai import OpenAI
+import openai
 import os
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Optional override from settings if present
-if not client.api_key:
+if not openai.api_key:
     with open("settings.json", "r") as f:
-        client.api_key = json.load(f).get("openai_key")
+        openai.api_key = json.load(f).get("openai_key")
 
 
 def load_reviews(json_file, limit=50):
@@ -49,8 +50,8 @@ def analyze_reviews(reviews):
 
     prompt = prepare_prompt(reviews)
 
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
         messages=[
             {"role": "system", "content": "You summarize and analyze hotel reviews."},
             {"role": "user", "content": prompt}
@@ -59,8 +60,7 @@ def analyze_reviews(reviews):
         max_tokens=1000
     )
 
-    return response.choices[0].message.content
-
+    return response.choices[0].message["content"]
 
 
 if __name__ == "__main__":

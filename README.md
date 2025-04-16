@@ -137,9 +137,12 @@ booking_reviews.json
 
 ## 📌 Requirements
 
+
 - Python 3.9+
 - Google Chrome installed (for Selenium)
 - A valid OpenAI API key
+- ✅ No Rust or compilers required – works out of the box on clean Windows systems
+> ⚠️ This project uses `openai==0.28.1` to avoid requiring Rust (used by newer SDK versions).
 
 ---
 

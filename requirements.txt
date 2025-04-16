@@ -1,4 +1,5 @@
 beautifulsoup4~=4.13.3
 selenium~=4.30.0
 webdriver-manager
-openai~=1.70.0
+openai==0.28.1
+pydantic~=1.10.13
