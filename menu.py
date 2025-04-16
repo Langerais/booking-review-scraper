@@ -66,13 +66,18 @@ def set_options(settings):
         save_settings(settings)
 
 
+def clamp(val, min_val=1, max_val=999):
+    return max(min_val, min(val, max_val))
+
+
 def scrape_reviews(settings):
     url = input("Paste Booking.com hotel URL: ").strip()
     output = "booking_reviews.json"
+    max_reviews = clamp(settings["max_reviews"])
     cmd = [
         sys.executable, "booking_scraper.py",
         "--url", url,
-        "--max", str(settings["max_reviews"]),
+        "--max", str(max_reviews),
         "--output", output
     ]
     subprocess.run(cmd)
