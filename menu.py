@@ -11,7 +11,8 @@ def load_settings():
         default = {
             "openai_key": "",
             "model": "gpt-4o-mini",
-            "max_reviews": 30
+            "max_reviews": 30,
+            "extra_prompt": ""
         }
         save_settings(default)
     with open(SETTINGS_FILE, "r") as f:
@@ -29,7 +30,8 @@ def set_options(settings):
         print(f"1. Set number of reviews to scrape (current: {settings['max_reviews']})")
         print(f"2. Select AI model (current: {settings['model']})")
         print(f"3. Set OpenAI API Key ({'set' if settings['openai_key'] else 'not set'})")
-        print("4. Back to main menu")
+        print(f"4. Set extra prompt instructions ({'set' if settings.get('extra_prompt') else 'not set'})")
+        print("5. Back to main menu")
 
         opt = input("Choose option: ").strip()
 
@@ -37,7 +39,7 @@ def set_options(settings):
             val = input("Enter number of reviews to scrape (1-999): ").strip()
             if val.isdigit() and 1 <= int(val) <= 999:
                 settings["max_reviews"] = int(val)
-                print(f"[✓] Max reviews set to {val}")
+                print(f"[\u2713] Max reviews set to {val}")
             else:
                 print("[!] Invalid number.")
         elif opt == "2":
@@ -55,10 +57,14 @@ def set_options(settings):
             key = input("Enter your OpenAI API key: ").strip()
             if key:
                 settings["openai_key"] = key
-                print("[✓] API key saved.")
+                print("[\u2713] API key saved.")
             else:
                 print("[!] Invalid key.")
         elif opt == "4":
+            extra = input("Enter any extra instructions you'd like to include in the prompt (leave blank to clear): ")
+            settings["extra_prompt"] = extra.strip()
+            print("[\u2713] Extra instructions updated.")
+        elif opt == "5":
             break
         else:
             print("[!] Invalid option.")

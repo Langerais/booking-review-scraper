@@ -1,13 +1,20 @@
-# analyze_reviews.py
-
 import argparse
 import json
 import openai
 import os
 
-# client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+SETTINGS_FILE = "settings.json"
+
+def load_extra_prompt():
+    if not os.path.exists(SETTINGS_FILE):
+        return ""
+    with open(SETTINGS_FILE, "r") as f:
+        settings = json.load(f)
+        return settings.get("extra_prompt", "")
+
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
+EXTRA_PROMPT = load_extra_prompt()
 
 # Optional override from settings if present
 if not openai.api_key:
@@ -37,9 +44,14 @@ def prepare_prompt(reviews):
         "- A summary of customer sentiment\n"
         "- The most common pros\n"
         "- The most common cons\n"
-        "- Actionable suggestions the business can take to improve based on the feedback.\n\n"
-        f"Reviews:\n{combined}"
+        "- Actionable suggestions the business can take to improve based on the feedback.\n"
     )
+    if EXTRA_PROMPT:
+        prompt += f"\n\nAdditional user request:\n{EXTRA_PROMPT.strip()}\n"
+    else:
+        print("No Extra prompt!")
+    prompt += f"\n\nReviews:\n{combined}"
+    print(EXTRA_PROMPT)
     return prompt
 
 
@@ -79,4 +91,4 @@ if __name__ == "__main__":
     if args.output:
         with open(args.output, "w", encoding="utf-8") as f:
             f.write(result)
-        print(f"\n[✓] Saved analysis to {args.output}")
+        print(f"\n[\u2713] Saved analysis to {args.output}")

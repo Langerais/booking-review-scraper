@@ -1,0 +1,3 @@
+@echo off
+echo [*] Building Docker image...
+docker build -t booking-review-summarizer .
