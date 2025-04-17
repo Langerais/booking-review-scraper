@@ -63,10 +63,10 @@ After running `menu.py`, choose an option:
 - Set max number of reviews to scrape
 - Select OpenAI model to use
 - Enter your OpenAI API key (required for analysis)
+- Add extra instructions for the AI (e.g. “Focus on cleanliness issues” or “Make it sound friendly and informal”)
 
-Settings are saved to `settings.json` and automatically used on next run.
+All settings are saved to `settings.json` and automatically reused on next run.
 
----
 
 ## 📁 File Structure
 
